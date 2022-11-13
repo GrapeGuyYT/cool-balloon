@@ -1,0 +1,77 @@
+-- remove line after dev testing finished
+loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+-- Create variables | Balloon animations, UserInputService, Humanoid, TweenService (for gui's)
+local HoldingAnim = Instance.new("Animation", workspace)
+local JumpingAnim = Instance.new('Animation', workspace)
+HoldingAnim.AnimationId = 'rbxassetid://148831127'
+JumpingAnim.AnimationId = 'rbxassetid://148840371'
+local Humanoid = game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
+local Hold = Humanoid:LoadAnimation(HoldingAnim)
+local Jump = Humanoid:LoadAnimation(JumpingAnim)
+local NormalGravity = workspace.Gravity
+local UIS = game:GetService("UserInputService")
+local TS = game:GetService("TweenService")
+local equipped = false
+-- System Message Function | Make Gui.
+local function systemMessage(text, duration, fade, sizeMultiplier, soundId)
+	local g = Instance.new("ScreenGui", game.Players.LocalPlayer.PlayerGui)
+	local ls = Instance.new("Sound", g)
+	ls.SoundId = 'rbxassetid://'..soundId
+	ls:Play()
+	local f = Instance.new("Frame", g)
+	f.Size = UDim2.new(0.5*sizeMultiplier, 0, 0.5*sizeMultiplier, 0)
+	f.AnchorPoint = Vector2.new(0.5, 0.5)
+	f.Position = UDim2.new(0.5, 0, 0.5, 0)
+	f.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+	f.BackgroundTransparency = 0.5
+	f.Position = UDim2.new(0.5, 0, 1, 0)
+	Instance.new("UICorner", f).CornerRadius = UDim.new(0, 50)
+	local tl = Instance.new("TextLabel", f)
+	tl.Size = UDim2.new(1, 0, 1, 0)
+	tl.Text = text
+	tl.BackgroundTransparency = 1
+	tl.TextColor3 = Color3.fromRGB(255, 255, 255)
+	tl.TextScaled = true
+	tl.TextStrokeTransparency = 0
+	TS:Create(f, TweenInfo.new(fade/2, Enum.EasingStyle.Sine, Enum.EasingDirection.In), {Position = UDim2.new(0.5, 0, 0.5, 0)}):Play()
+	wait(fade/2)
+	wait(duration)
+	TS:Create(f, TweenInfo.new(fade, Enum.EasingStyle.Sine, Enum.EasingDirection.In), {Position = UDim2.new(0.5, 0, -1, 0)}):Play()
+	wait(fade)
+	g:Destroy()
+end
+systemMessage("Thank you for using 'Balloon Script' by pringles#2584", 2, 2, 1, 2789465970)
+systemMessage("To equip the balloon, press 'Z'", 2,1,0.75, 1524543584)
+-- Main input | Z to equip!
+UIS.InputBegan:Connect(function(input, proc)
+	if not proc and input.KeyCode == Enum.KeyCode.Z then
+		if equipped == false then
+			equipped = true
+		else
+			equipped = false
+		end
+		systemMessage("Balloon Equipped = "..tostring(equipped), 0.2, 0.8, 0.5, 542332175)
+	end
+end)
+-- Main function
+while wait() do
+	if Humanoid.FloorMaterial == Enum.Material.Air and equipped == true then
+		workspace.Gravity = 65
+		if Jump.IsPlaying == false then
+			Jump:Play()
+		end
+		else
+		if equipped == true then
+			Hold:Play()
+			Jump:Stop()
+			else
+			Hold:Stop()
+			Jump:Stop()
+			workspace.Gravity = NormalGravity
+		end
+
+	end
+	if Humanoid.Health <= 0 then
+		workspace.Gravity = NormalGravity
+	end
+end
