@@ -1,5 +1,3 @@
--- remove line after dev testing finished
-loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
 -- Create variables | Balloon animations, UserInputService, Humanoid, TweenService (for gui's)
 local HoldingAnim = Instance.new("Animation", workspace)
 local JumpingAnim = Instance.new('Animation', workspace)
